@@ -2,39 +2,42 @@
 
 /**
  * insertion_sort_list - sorts by the marker of array
- * @list: dll, a listint type
+ * @list: list to sort
  * Return: void
  */
 void insertion_sort_list(listint_t **list)
 {
-	listint_t *temp = NULL, *mark = NULL;
+	listint_t	*head;
+	listint_t	*tmp;
 
-	if ((*list)->next == NULL || list == NULL || (*list) == NULL)
+	if (!list)
 		return;
-
-	temp = *list;
-
-	mark = *list;
-
-	while (mark != NULL)
+	if (!*list)
+		return;
+	head = *list;
+	while (head)
 	{
-		mark = mark->next;
-
-		while (temp->prev && (temp->n < temp->prev->n))
+		while (head->next && (head->n > head->next->n))
 		{
-			temp->prev->next = temp->next;
-			if (temp->next != NULL)
-				temp->next->prev = temp->prev;
+			tmp = head->next;
+			head->next = tmp->next;
+			tmp->prev = head->prev;
 
-			temp->next = temp->prev;
-			temp->prev = temp->next->prev;
-			if (temp->prev != NULL)
-				temp->prev->next = temp;
+			if (head->prev)
+				head->prev->next = tmp;
+			if (tmp->next)
+				tmp->next->prev = head;
+
+			head->prev = tmp;
+			tmp->next = head;
+
+			if (tmp->prev)
+				head = tmp->prev;
 			else
-				*list = temp;
-			temp->next->prev = temp;
+				*list = tmp;
+
 			print_list(*list);
 		}
-		temp = mark;
+		head = head->next;
 	}
 }
